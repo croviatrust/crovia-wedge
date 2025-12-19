@@ -1,0 +1,10 @@
+# Crovia runtime artifacts
+.crovia/
+EVIDENCE.json
+trust_bundle*.json
+cep_capsule*.json
+gaps/
+
+# Python cache
+__pycache__/
+*.pyc

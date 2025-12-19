@@ -1,0 +1,22 @@
+name: "Crovia · Evidence Presence (WEDGE)"
+description: "Records whether auditable AI training evidence is present."
+author: "Crovia"
+inputs:
+  mode:
+    description: "warn or fail"
+    required: false
+    default: "warn"
+  root:
+    description: "Root path to scan"
+    required: false
+    default: "."
+runs:
+  using: "composite"
+  steps:
+    - run: python3 -m pip install -r ${{ github.action_path }}/requirements.txt
+      shell: bash
+    - run: python3 ${{ github.action_path }}/src/check.py
+      shell: bash
+      env:
+        CROVIA_MODE: ${{ inputs.mode }}
+        CROVIA_ROOT: ${{ inputs.root }}

@@ -1,0 +1,1 @@
+# Crovia WEDGE has zero external dependencies by design.
