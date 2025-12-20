@@ -1,0 +1,40 @@
+name: WEDGE self-test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "src/**"
+      - "action.yml"
+      - "README.md"
+
+jobs:
+  wedge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run WEDGE (warn)
+        id: wedge
+        uses: ./
+        with:
+          mode: warn
+          root: .
+
+      - name: Print outputs
+        run: |
+          echo "verdict=${{ steps.wedge.outputs.verdict }}"
+          echo "reason=${{ steps.wedge.outputs.reason }}"
+          echo "primary=${{ steps.wedge.outputs.primary }}"
+          echo "critical_omissions=${{ steps.wedge.outputs.critical_omissions }}"
+          echo "verdict_path=${{ steps.wedge.outputs.verdict_path }}"
+          echo "pointer=${{ steps.wedge.outputs.pointer }}"
+
+      - name: Show pointer if present
+        run: |
+          if [ -f EVIDENCE.pointer.json ]; then
+            echo "Pointer found:"
+            cat EVIDENCE.pointer.json
+          else
+            echo "No pointer file."
+          fi
