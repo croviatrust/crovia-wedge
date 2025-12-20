@@ -1,6 +1,11 @@
 name: "Crovia · Evidence Presence (WEDGE)"
 description: "Records whether auditable AI training evidence is present."
 author: "Crovia"
+
+branding:
+  icon: "eye"
+  color: "blue"
+
 inputs:
   mode:
     description: "warn or fail"
@@ -10,12 +15,32 @@ inputs:
     description: "Root path to scan"
     required: false
     default: "."
+
+outputs:
+  verdict:
+    description: "CROVIA verdict: GREEN or RED"
+    value: ${{ steps.crovia.outputs.verdict }}
+  reason:
+    description: "Reason for verdict"
+    value: ${{ steps.crovia.outputs.reason }}
+  primary:
+    description: "Comma-separated list of evidence artifacts found"
+    value: ${{ steps.crovia.outputs.primary }}
+  critical_omissions:
+    description: "Number of critical omissions detected"
+    value: ${{ steps.crovia.outputs.critical_omissions }}
+  verdict_path:
+    description: "Path to .crovia verdict_latest.json"
+    value: ${{ steps.crovia.outputs.verdict_path }}
+
 runs:
   using: "composite"
   steps:
     - run: python3 -m pip install -r ${{ github.action_path }}/requirements.txt
       shell: bash
-    - run: python3 ${{ github.action_path }}/src/check.py
+
+    - id: crovia
+      run: python3 ${{ github.action_path }}/src/check.py
       shell: bash
       env:
         CROVIA_MODE: ${{ inputs.mode }}
