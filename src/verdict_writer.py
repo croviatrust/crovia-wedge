@@ -39,6 +39,26 @@ with open(latest_path, "w", encoding="utf-8") as f:
 with open(index_path, "a", encoding="utf-8") as f:
     f.write(json.dumps(verdict, ensure_ascii=False) + "\n")
 
+# ─────────────────────────────────────────────
+# POINTER MODE — record where absence is observed
+# ─────────────────────────────────────────────
+if status == "RED":
+    pointer = {
+        "schema": "crovia.evidence.pointer.v1",
+        "observed_at": now,
+        "context": "ci",
+        "verdict": status,
+        "reason": reason,
+        "pointer_type": "absence",
+        "observer": "crovia-wedge",
+        "continuum": "open-plane",
+        "note": "No publicly auditable training evidence was observable at this location and time."
+    }
+
+    with open("EVIDENCE.pointer.json", "w", encoding="utf-8") as f:
+        json.dump(pointer, f, indent=2)
+
+# GitHub Actions outputs
 gh_out = os.getenv("GITHUB_OUTPUT")
 if gh_out:
     with open(gh_out, "a", encoding="utf-8") as f:
@@ -47,5 +67,7 @@ if gh_out:
         f.write(f"primary={','.join(primary)}\n")
         f.write(f"critical_omissions={critical_omissions}\n")
         f.write(f"verdict_path={latest_path}\n")
+        if status == "RED":
+            f.write("pointer=EVIDENCE.pointer.json\n")
 
 print(f"[CROVIA] Verdict recorded: {status} ({reason})")
