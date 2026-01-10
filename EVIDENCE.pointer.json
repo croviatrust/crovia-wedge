@@ -1,11 +1,11 @@
 {
   "schema": "crovia.evidence.pointer.v1",
-  "status": "externalized",
-  "statement": "This repository does not host full training evidence. Evidence is published as a separate, versioned forensic dataset (Open Plane).",
-  "evidence_location": "https://huggingface.co/datasets/Crovia/global-ai-training-omissions",
-  "open_plane": {
-    "signal": "open/signal/presence_latest.jsonl",
-    "forensic": "open/forensic/absence_receipts_7d.jsonl",
-    "matrix": "open/signal/verdict_matrix_latest.jsonl"
-  }
+  "observed_at": "2026-01-10T15:22:36.503064+00:00",
+  "context": "ci",
+  "verdict": "RED",
+  "reason": "evidence_absent",
+  "pointer_type": "absence",
+  "observer": "crovia-wedge",
+  "continuum": "open-plane",
+  "note": "No publicly auditable training evidence was observable at this location and time."
 }
