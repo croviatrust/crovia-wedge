@@ -21,14 +21,31 @@ jobs:
           mode: warn
           root: .
 
+      - name: Run WEDGE v2 (warn)
+        id: wedge_v2
+        uses: ./
+        with:
+          mode: warn
+          root: .
+          version: "2"
+          badge: "true"
+          pointer: "true"
+
       - name: Print outputs
         run: |
-          echo "verdict=${{ steps.wedge.outputs.verdict }}"
-          echo "reason=${{ steps.wedge.outputs.reason }}"
-          echo "primary=${{ steps.wedge.outputs.primary }}"
-          echo "critical_omissions=${{ steps.wedge.outputs.critical_omissions }}"
-          echo "verdict_path=${{ steps.wedge.outputs.verdict_path }}"
-          echo "pointer=${{ steps.wedge.outputs.pointer }}"
+          echo "[v1] verdict=${{ steps.wedge.outputs.verdict }}"
+          echo "[v1] reason=${{ steps.wedge.outputs.reason }}"
+          echo "[v1] primary=${{ steps.wedge.outputs.primary }}"
+          echo "[v1] critical_omissions=${{ steps.wedge.outputs.critical_omissions }}"
+          echo "[v1] verdict_path=${{ steps.wedge.outputs.verdict_path }}"
+          echo "[v1] pointer=${{ steps.wedge.outputs.pointer }}"
+          echo ""
+          echo "[v2] verdict=${{ steps.wedge_v2.outputs.verdict }}"
+          echo "[v2] reason=${{ steps.wedge_v2.outputs.reason }}"
+          echo "[v2] primary=${{ steps.wedge_v2.outputs.primary }}"
+          echo "[v2] critical_omissions=${{ steps.wedge_v2.outputs.critical_omissions }}"
+          echo "[v2] verdict_path=${{ steps.wedge_v2.outputs.verdict_path }}"
+          echo "[v2] pointer=${{ steps.wedge_v2.outputs.pointer }}"
 
       - name: Show pointer if present
         run: |

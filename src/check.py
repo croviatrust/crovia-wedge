@@ -72,9 +72,16 @@ subprocess.check_call([
 ])
 
 # Console output (Crovia style)
-print("\n────────────────────────────────────────")
-print(f"CROVIA · EVIDENCE {status}")
-print("────────────────────────────────────────")
+_line = "────────────────────────────────────────"
+try:
+    print("\n" + _line)
+    print(f"CROVIA · EVIDENCE {status}")
+    print(_line)
+except UnicodeEncodeError:
+    _line = "-" * 40
+    print("\n" + _line)
+    print(f"CROVIA - EVIDENCE {status}")
+    print(_line)
 
 if status == "GREEN":
     print("Auditable training evidence detected.")

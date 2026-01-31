@@ -15,6 +15,18 @@ inputs:
     description: "Root path to scan"
     required: false
     default: "."
+  version:
+    description: "WEDGE engine version: 1 or 2"
+    required: false
+    default: "1"
+  badge:
+    description: "(v2) Generate badge (.crovia/badge.svg)"
+    required: false
+    default: "false"
+  pointer:
+    description: "(v2) Generate signed pointer (.crovia/PTR-*.json)"
+    required: false
+    default: "false"
 
 outputs:
   verdict:
@@ -32,6 +44,9 @@ outputs:
   verdict_path:
     description: "Path to .crovia verdict_latest.json"
     value: ${{ steps.crovia.outputs.verdict_path }}
+  pointer:
+    description: "(RED only) Path to EVIDENCE.pointer.json"
+    value: ${{ steps.crovia.outputs.pointer }}
 
 runs:
   using: "composite"
@@ -40,8 +55,15 @@ runs:
       shell: bash
 
     - id: crovia
-      run: python3 ${{ github.action_path }}/src/check.py
+      run: |
+        if [ "${{ inputs.version }}" = "2" ]; then
+          python3 ${{ github.action_path }}/src/check_v2.py
+        else
+          python3 ${{ github.action_path }}/src/check.py
+        fi
       shell: bash
       env:
         CROVIA_MODE: ${{ inputs.mode }}
         CROVIA_ROOT: ${{ inputs.root }}
+        CROVIA_BADGE: ${{ inputs.badge }}
+        CROVIA_POINTER: ${{ inputs.pointer }}
