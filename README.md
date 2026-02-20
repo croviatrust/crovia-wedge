@@ -22,9 +22,9 @@ It produces a **neutral observation**, not an interpretation.
 
 Possible outcomes:
 
-- **OK** — auditable evidence was found
-- **NO** — no public evidence was observable
-- **POINTER** — absence observed, with a pointer to the observation context
+- **GREEN** — auditable evidence was found
+- **RED** — no public evidence was observable
+- **YELLOW** — evidence present but with critical gaps
 
 WEDGE does **not**:
 - accuse anyone
@@ -65,56 +65,70 @@ When absence is observed, the pointer records **where and when** no public evide
 
 ---
 
-## Example usage
+## Usage
 
-    name: Crovia WEDGE — Evidence Presence Check
+### CLI (available now via crovia-core-engine)
 
-    on: [push]
+```bash
+# Install
+pip install crovia
 
-    jobs:
-      wedge:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v4
+# Scan current directory for evidence artifacts
+crovia wedge scan
 
-          - name: Run Crovia WEDGE
-            uses: croviatrust/crovia-wedge@v1
-            with:
-              mode: warn
-              root: .
+# Scan a specific project directory
+crovia wedge scan --path ./my-ai-project
 
-The workflow can optionally react to the verdict using outputs, but WEDGE itself remains neutral.
+# One-line status
+crovia wedge status
 
----
+# Fail if no evidence found (for CI scripts)
+crovia wedge scan --mode fail
 
-## Using outputs in CI (optional)
+# Explain what artifacts Crovia looks for
+crovia wedge explain
+```
 
-WEDGE exposes outputs you can use in your workflow:
+### GitHub Action [ROADMAP]
 
-- `verdict` (`GREEN` / `RED`)
-- `reason` (`evidence_recorded` / `evidence_absent` / `evidence_compromised`)
-- `primary` (comma-separated)
-- `critical_omissions` (integer)
-- `verdict_path` (path to `.crovia/verdicts/verdict_latest.json`)
-- `pointer` (present only when `RED`, points to `EVIDENCE.pointer.json`)
+> The GitHub Action (`croviatrust/crovia-wedge@v1`) is currently in development.  
+> Use the CLI above in the meantime via a `run:` step.
 
-Example (fail only when evidence is absent):
+Planned usage (once published):
 
-    jobs:
-      wedge:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v4
+```yaml
+name: Crovia WEDGE — Evidence Presence Check
 
-          - name: Run Crovia WEDGE
-            id: wedge
-            uses: croviatrust/crovia-wedge@v1
-            with:
-              mode: warn
+on: [push]
 
-          - name: Fail if evidence is absent
-            if: steps.wedge.outputs.verdict == 'RED' && steps.wedge.outputs.reason == 'evidence_absent'
-            run: exit 1
+jobs:
+  wedge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Crovia WEDGE
+        uses: croviatrust/crovia-wedge@v1
+        with:
+          mode: warn
+          root: .
+```
+
+### CI via CLI (available now)
+
+```yaml
+jobs:
+  wedge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Crovia
+        run: pip install crovia
+
+      - name: Run WEDGE scan
+        run: crovia wedge scan --mode fail
+```
 
 ---
 
@@ -132,11 +146,11 @@ WEDGE tells you what exists — and lets others decide what it means.
 
 ## Part of Crovia
 
-WEDGE is part of the Crovia ecosystem:
+WEDGE is part of the Crovia open core:
 
-- **CEP Terminal** — public inspection
-- **Open Plane / Hubble Continuum** — evidence observation over time
-- **DSSE / Sentinel** — advanced analysis (separate layers)
+- [crovia-core-engine](https://github.com/croviatrust/crovia-core-engine) — CLI + CRC-1 evidence pipeline
+- [crovia-evidence-lab](https://github.com/croviatrust/crovia-evidence-lab) — public evidence artifacts
+- [Live Registry](https://registry.croviatrust.com/registry/) — real-time observation stream
 
 Each layer remains independent.
 
