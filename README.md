@@ -89,12 +89,7 @@ crovia wedge scan --mode fail
 crovia wedge explain
 ```
 
-### GitHub Action [ROADMAP]
-
-> The GitHub Action (`croviatrust/crovia-wedge@v1`) is currently in development.  
-> Use the CLI above in the meantime via a `run:` step.
-
-Planned usage (once published):
+### GitHub Action (available now)
 
 ```yaml
 name: Crovia WEDGE — Evidence Presence Check
@@ -110,11 +105,21 @@ jobs:
       - name: Run Crovia WEDGE
         uses: croviatrust/crovia-wedge@v1
         with:
-          mode: warn
-          root: .
+          mode: warn   # or: fail
+          root: .      # directory to scan
 ```
 
-### CI via CLI (available now)
+Outputs you can use in subsequent steps:
+
+```yaml
+      - name: Fail if no evidence found
+        if: steps.wedge.outputs.verdict == 'RED'
+        run: exit 1
+```
+
+> `version: 2` (badge + signed pointer generation) is in development.
+
+### CI via CLI (alternative)
 
 ```yaml
 jobs:
