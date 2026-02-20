@@ -14,6 +14,8 @@ import json
 import subprocess
 from datetime import datetime, timezone
 
+sys.path.insert(0, os.path.dirname(__file__))
+
 from badge_generator import CroviaBadgeGenerator
 from signed_pointer import SignedPointerGenerator
 
