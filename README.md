@@ -1,3 +1,5 @@
+> **Archived (2026-09-19).** WEDGE was the first presence/absence experiment. Its idea — record the absence of evidence, verifiably — became **TACET** in [croviatrust/countersign](https://github.com/croviatrust/countersign): hourly, drand-opened, Bitcoin-anchored, offline-verifiable. Definitions: [CANON.md](https://github.com/croviatrust/countersign/blob/main/CANON.md).
+
 # Crovia WEDGE
 
 **Evidence Presence Wedge for AI training transparency.**
